@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fiscalización - FiscaliTrack</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</head>
+
+
+<body>
+
+<div class="container mt-5">
+
+    <h1>
+        Fiscalización
+    </h1>
+
+    <p>
+        Registro y control de vehículos fiscalizados.
+    </p>
+
+    <hr>
+
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }}">
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- BUSCAR PATENTE -->
+
+    <h3>
+        Buscar patente
+    </h3>
+
+    <p>
+        Consulte si un vehículo ya fue fiscalizado durante el período actual.
+    </p>
+
+
+    <form method="GET">
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Patente
+            </label>
+
+            <input
+                type="text"
+                name="buscar_patente"
+                class="form-control"
+                placeholder="Ingrese la patente"
+                value="{{ patente_buscada }}"
+            >
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn btn-info"
+        >
+            Buscar patente
+        </button>
+
+    </form>
+
+
+    {% if patente_buscada %}
+
+        <hr>
+
+
+        {% if fiscalizacion_encontrada %}
+
+            <div class="alert alert-warning">
+
+                <h5>
+                    Vehículo ya fiscalizado
+                </h5>
+
+
+                <p>
+
+                    <strong>
+                        Patente:
+                    </strong>
+
+                    {{ fiscalizacion_encontrada.patente }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Fecha y hora:
+                    </strong>
+
+                    {{ fiscalizacion_encontrada.fecha_hora }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Funcionario:
+                    </strong>
+
+                    {{ fiscalizacion_encontrada.funcionario.nombre }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Estado:
+                    </strong>
+
+                    {{ fiscalizacion_encontrada.estado }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Resultado:
+                    </strong>
+
+                    {{ fiscalizacion_encontrada.resultado }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Estado de fiscalización:
+                    </strong>
+
+                    No disponible para una nueva fiscalización durante el período actual.
+
+                </p>
+
+            </div>
+
+
+        {% else %}
+
+
+            <div class="alert alert-success">
+
+                <h5>
+                    Vehículo disponible
+                </h5>
+
+
+                <p>
+
+                    La patente
+
+                    <strong>
+                        {{ patente_buscada }}
+                    </strong>
+
+                    no registra una fiscalización durante el período actual.
+
+                </p>
+
+
+                <p>
+                    El vehículo puede ser fiscalizado.
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+    {% endif %}
+
+
+    <hr>
+
+
+    <!-- NUEVA FISCALIZACIÓN -->
+
+    <h3>
+        Nueva fiscalización
+    </h3>
+
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        {% csrf_token %}
+
+
+        <!-- ERRORES DEL FORMULARIO -->
+
+        {% if form.errors %}
+
+            <div class="alert alert-danger">
+
+                <strong>
+                    Revise los datos ingresados.
+                </strong>
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Patente
+            </label>
+
+            {{ form.patente }}
+
+            {% for error in form.patente.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Tipo de vehículo
+            </label>
+
+            {{ form.tipo_vehiculo }}
+
+            {% for error in form.tipo_vehiculo.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Marca
+            </label>
+
+            {{ form.marca }}
+
+            {% for error in form.marca.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Modelo
+            </label>
+
+            {{ form.modelo }}
+
+            {% for error in form.modelo.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Color
+            </label>
+
+            {{ form.color }}
+
+            {% for error in form.color.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Fecha y hora
+            </label>
+
+            {{ form.fecha_hora }}
+
+            {% for error in form.fecha_hora.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Motivo
+            </label>
+
+            {{ form.motivo }}
+
+            {% for error in form.motivo.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Fotografía
+            </label>
+
+            {{ form.fotografia }}
+
+            {% for error in form.fotografia.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Observaciones
+            </label>
+
+            {{ form.observaciones }}
+
+            {% for error in form.observaciones.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Estado
+            </label>
+
+            {{ form.estado }}
+
+            {% for error in form.estado.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Resultado
+            </label>
+
+            {{ form.resultado }}
+
+            {% for error in form.resultado.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Funcionario
+            </label>
+
+            {{ form.funcionario }}
+
+            {% for error in form.funcionario.errors %}
+
+                <div class="text-danger">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Guardar fiscalización
+        </button>
+
+
+        <a
+            href="/"
+            class="btn btn-secondary"
+        >
+            Volver
+        </a>
+
+    </form>
+
+
+    <hr class="mt-5">
+
+
+    <!-- LISTADO -->
+
+    <h3>
+        Fiscalizaciones registradas
+    </h3>
+
+
+    <table class="table table-striped">
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Patente
+                </th>
+
+                <th>
+                    Vehículo
+                </th>
+
+                <th>
+                    Marca
+                </th>
+
+                <th>
+                    Modelo
+                </th>
+
+                <th>
+                    Fecha
+                </th>
+
+                <th>
+                    Estado
+                </th>
+
+                <th>
+                    Resultado
+                </th>
+
+                <th>
+                    Funcionario
+                </th>
+
+                <th>
+                    Acciones
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+
+            {% for fiscalizacion in fiscalizaciones %}
+
+            <tr>
+
+                <td>
+                    {{ fiscalizacion.patente }}
+                </td>
+
+                <td>
+                    {{ fiscalizacion.tipo_vehiculo }}
+                </td>
+
+                <td>
+                    {{ fiscalizacion.marca }}
+                </td>
+
+                <td>
+                    {{ fiscalizacion.modelo }}
+                </td>
+
+                <td>
+                    {{ fiscalizacion.fecha_hora }}
+                </td>
+
+                <td>
+                    {{ fiscalizacion.estado }}
+                </td>
+
+                <td>
+                    {{ fiscalizacion.resultado }}
+                </td>
+
+                <td>
+                    {{ fiscalizacion.funcionario.nombre }}
+                </td>
+
+
+                <td>
+
+                    <a
+                        href="/fiscalizacion/editar/{{ fiscalizacion.id }}/"
+                        class="btn btn-warning btn-sm"
+                    >
+                        Editar
+                    </a>
+
+
+                    <a
+                        href="/fiscalizacion/eliminar/{{ fiscalizacion.id }}/"
+                        class="btn btn-danger btn-sm"
+                    >
+                        Eliminar
+                    </a>
+
+                </td>
+
+            </tr>
+
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="9">
+
+                    No existen fiscalizaciones registradas.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+
+        </tbody>
+
+    </table>
+
+
+</div>
+
+
+</body>
+
+</html>

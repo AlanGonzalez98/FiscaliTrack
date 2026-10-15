@@ -1,0 +1,15 @@
+CONTEXTO
+
+¿Qué hace FiscaliTrack?
+
+FiscaliTrack es un sistema web que permite registrar, consultar y controlar fiscalizaciones vehiculares. El sistema almacena información del vehículo, como patente, tipo, marca, modelo y color, además de los datos de la fiscalización, funcionario responsable, estado, resultado, observaciones y fotografía.
+
+También permite buscar una patente antes de realizar una fiscalización, para comprobar si ese vehículo ya fue fiscalizado durante el período actual. Además, registra las acciones realizadas mediante un módulo de auditoría.
+
+¿Qué problemática resuelve?
+
+FiscaliTrack busca solucionar el problema de la duplicación de fiscalizaciones y la dificultad para gestionar los registros de manera ordenada.
+
+Sin un sistema centralizado, un funcionario puede no saber si un vehículo ya fue fiscalizado, lo que puede generar pérdida de tiempo, registros duplicados y dificultad para identificar quién realizó una fiscalización y cuál fue su resultado.
+
+El sistema permite consultar rápidamente la patente y, si ya existe una fiscalización registrada durante el período actual, evita que se vuelva a realizar, mejorando el control y la eficiencia del proceso.
